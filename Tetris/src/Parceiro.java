@@ -8,6 +8,8 @@ public class Parceiro
     private ObjectInputStream  receptor;
     private ObjectOutputStream transmissor;
 
+    private String nome;
+
     public Parceiro (Socket             conexao,
                      ObjectInputStream  receptor,
                      ObjectOutputStream transmissor)
@@ -51,6 +53,18 @@ public class Parceiro
             throw new Exception ("Erro de recepcao");
         }
     }
+
+	public void setNome(String nome) throws Exception
+	{
+		if(nome == null)
+			throw new Exception("Nome inválido!");
+		this.nome = nome;
+	} 				
+
+	public String getNome()
+	{
+		return this.nome;
+	}
 
     public void adeus () throws Exception
     {

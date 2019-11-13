@@ -1,9 +1,9 @@
-package org.psnbtech;
-
 import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Random;
+import java.net.*;
+import java.io.*;
 
 import javax.swing.JFrame;
 /**
@@ -49,7 +49,7 @@ public class Tetris extends JFrame {
 	 * Whether or not the game is paused.
 	 */
 	private boolean isPaused;
-	
+		
 	/**
 	 * Whether or not we've played a game yet. This is set to true
 	 * initially and then set to false when the game starts.
@@ -220,7 +220,7 @@ public class Tetris extends JFrame {
 						rotatePiece((currentRotation == 0) ? 3 : currentRotation - 1);
 					}
 					break;
-					
+				
 				/*
 			     * Rotate Clockwise - When pressed, check to see that the game is not paused
 				 * and then attempt to rotate the piece clockwise. Because of the size and
@@ -309,7 +309,7 @@ public class Tetris extends JFrame {
 					isGameOver = true;
 					endTime = (int) Clock.getCurrentTime();
 					logicTimer.setPaused(true);
-					//gameTime = (int) (endTime - startTime) / 1000;
+					gameTime = (int) (endTime - startTime) / 1000;
 				}
 			}
 			
@@ -516,7 +516,7 @@ public class Tetris extends JFrame {
 			this.isGameOver = true;
 			endTime = (int) Clock.getCurrentTime();
 			logicTimer.setPaused(true);
-			//gameTime = (int) (endTime - startTime) / 1000;
+			gameTime = (int) (endTime - startTime) / 1000;
 		}
 	}
 	
@@ -697,6 +697,77 @@ public class Tetris extends JFrame {
 	 * @param args Unused.
 	 */
 	public static void main(String[] args) {
+		String host = null;
+		int porta = 0;
+		try
+		{
+			System.out.println("Ip:");
+			host = Teclado.getUmString();
+			System.out.println("Porta:");
+			porta = Teclado.getUmInt();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Valores inválidos");
+			return;
+		}
+
+		Socket conexao=null;
+		try
+		{
+		    conexao = new Socket (host, porta);
+		}
+		catch (Exception erro)
+		{
+		    erro.printStackTrace();
+
+		    System.err.println ("Indique o servidor e a porta corretos!\n");
+		    return;
+		}
+		
+		ObjectOutputStream transmissor=null;
+		try
+		{
+		    transmissor =
+		    new ObjectOutputStream(
+		    conexao.getOutputStream());
+		}
+		catch (Exception erro)
+		{
+		    erro.printStackTrace();
+
+		    System.err.println ("Indique o servidor e a porta corretos!\n");
+		    return;
+		}
+
+		ObjectInputStream receptor=null;
+		try
+		{
+		    receptor =
+		    new ObjectInputStream(
+		    conexao.getInputStream());
+		}
+		catch (Exception erro)
+		{
+		    erro.printStackTrace();
+		    System.err.println ("Indique o servidor e a porta corretos!\n");
+		    return;
+		}
+
+		Parceiro servidor=null;
+		try
+		{
+		    servidor = new Parceiro (conexao, receptor, transmissor);
+		}
+		catch (Exception erro)
+		{
+		    erro.printStackTrace();
+
+		    System.err.println ("Indique o servidor e a porta corretos!\n");
+		    return;
+		}
+		
 		Tetris tetris = new Tetris("usuario");
 		tetris.startGame();
 	}

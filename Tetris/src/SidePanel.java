@@ -1,5 +1,3 @@
-Ôªøpackage org.psnbtech;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -126,9 +124,9 @@ public class SidePanel extends JPanel {
 		 */
 		offset = STATS_INSET;
 		g.setFont(LARGE_FONT);
-		g.drawString("Estat√≠sticas", SMALL_INSET, offset += TEXT_STRIDE);
+		g.drawString("EstatÌsticas", SMALL_INSET, offset += TEXT_STRIDE);
 		g.setFont(SMALL_FONT);
-		g.drawString("N√≠vel: " + tetris.getLevel(), LARGE_INSET, offset += TEXT_STRIDE);
+		g.drawString("NÌvel: " + tetris.getLevel(), LARGE_INSET, offset += TEXT_STRIDE);
 		g.drawString("Pontos: " + tetris.getScore(), LARGE_INSET, offset += TEXT_STRIDE);
 		
 		/*
@@ -139,8 +137,8 @@ public class SidePanel extends JPanel {
 		g.setFont(SMALL_FONT);
 		g.drawString("A / < - Esquerda", LARGE_INSET, offset += TEXT_STRIDE);
 		g.drawString("D / > - Direita", LARGE_INSET, offset += TEXT_STRIDE);
-		g.drawString("Q - Girar Anti-hor√°rio", LARGE_INSET, offset += TEXT_STRIDE);
-		g.drawString("E / Espa√ßo - Girar Hor√°rio", LARGE_INSET, offset += TEXT_STRIDE);
+		g.drawString("Q - Girar Anti-hor·rio", LARGE_INSET, offset += TEXT_STRIDE);
+		g.drawString("E / EspaÁo - Girar Hor·rio", LARGE_INSET, offset += TEXT_STRIDE);
 		g.drawString("H / F - Segurar (Hold)", LARGE_INSET, offset += TEXT_STRIDE);
 		g.drawString("S - Cair", LARGE_INSET, offset += TEXT_STRIDE);
 		g.drawString("W - Cair tudo", LARGE_INSET, offset += TEXT_STRIDE);
@@ -150,7 +148,7 @@ public class SidePanel extends JPanel {
 		 * Draw the next piece preview box.
 		 */
 		g.setFont(LARGE_FONT);
-		g.drawString("Pr√≥x. pe√ßa:", SMALL_INSET, 70);
+		g.drawString("PrÛx. peÁa:", SMALL_INSET, 70);
 		g.drawRect(SQUARE_CENTER_X - SQUARE_SIZE, SQUARE_CENTER_Y - SQUARE_SIZE, SQUARE_SIZE * 2, SQUARE_SIZE * 2);
 		
 		/*
@@ -194,7 +192,7 @@ public class SidePanel extends JPanel {
 		
 		g.setColor(DRAW_COLOR);
 		g.setFont(SMALL_FONT);
-		g.drawString("Pe√ßa em hold:", SMALL_INSET, 140);
+		g.drawString("PeÁa em hold:", SMALL_INSET, 140);
 		g.drawRect(SQUARE_CENTER_X - SQUARE_SIZE, SQUARE_CENTER_Y - SQUARE_SIZE + 70, SQUARE_SIZE * 2, SQUARE_SIZE * 2);
 		
 		type = tetris.getHoldType();

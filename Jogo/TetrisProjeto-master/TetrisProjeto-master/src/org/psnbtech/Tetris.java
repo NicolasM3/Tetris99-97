@@ -220,7 +220,7 @@ public class Tetris extends JFrame {
 						rotatePiece((currentRotation == 0) ? 3 : currentRotation - 1);
 					}
 					break;
-				
+					
 				/*
 			     * Rotate Clockwise - When pressed, check to see that the game is not paused
 				 * and then attempt to rotate the piece clockwise. Because of the size and

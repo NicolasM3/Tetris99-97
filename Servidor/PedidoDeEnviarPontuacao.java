@@ -1,13 +1,13 @@
-public class PedidoDeAdicao extends Comunicado
+public class PedidoDeEnviarPontuacao extends Comunicado
 {
     private double valorParaAdicionar;
     
-    public PedidoDeAdicao (double valorParaAdicionar)
+    public PedidoDeEnviarPontuacao (double valorParaAdicionar)
     {
         this.valorParaAdicionar = valorParaAdicionar;
     }
     
-    public double getValorParaAdicionar ()
+    public double getValorParaEnviar ()
     {
         return this.valorParaAdicionar;
     }

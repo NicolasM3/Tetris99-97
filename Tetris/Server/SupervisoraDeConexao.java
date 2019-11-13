@@ -70,7 +70,7 @@ public class SupervisoraDeConexao extends Thread
 
         try
         {
-            synchronized (this.jogadores)
+            /*synchronized (this.jogadores)
             {
                 this.jogadores.add (this.jogador);
                 this.qtdJogadores++;
@@ -79,12 +79,12 @@ public class SupervisoraDeConexao extends Thread
                 	{
 						jogador.receba(new ComunicadoComecar(true));
 					}
-            }
+            }*/
 
             for(;;)
             {
                 Comunicado comunicado = this.jogador.envie ();
-
+                /*
                  if(comunicado==null)
                     return;
 
@@ -113,8 +113,8 @@ public class SupervisoraDeConexao extends Thread
                 	    	}
                 	    	this.jogador.adeus();
                 		}
-            		}
-				 }
+            	}*/
+			}
         }
         catch (Exception erro)
         {
@@ -132,7 +132,7 @@ public class SupervisoraDeConexao extends Thread
 
     private String quemGanhou()
     {
-		Jogada jogada1 = this.jogadores.get(0).getJogada();
+		/*JogadaJogada jogada1 = this.jogadores.get(0).getJogada();
 		Jogada jogada2 = this.jogadores.get(1).getJogada();
 
 		int comp = jogada1.compareTo(jogada2);
@@ -140,7 +140,7 @@ public class SupervisoraDeConexao extends Thread
 		if(comp == 0)
 			return "empate";
 		if(comp > 0)
-			return this.jogadores.get(0).getNome();
-		return this.jogadores.get(1).getNome();
+			return this.jogadores.get(0).getNome();*/
+		return "a";
 	}
 }

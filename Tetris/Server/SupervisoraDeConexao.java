@@ -82,8 +82,8 @@ public class SupervisoraDeConexao extends Thread
 
             for(;;)
             {
-                Comunicado comunicado = this.jogador.envie ();
-
+                Comunicado comunicado = this.jogador.envie();
+                
                 if(comunicado==null)
                     return;
 
@@ -91,8 +91,11 @@ public class SupervisoraDeConexao extends Thread
                 {
                     PedidoParaAdicionarPontos a = (PedidoParaAdicionarPontos) comunicado;
                     double ponto = a.getPontosParaAdicionar();
-                    //pontos = pontos + ponto;
+                    pontos = pontos + ponto;
+                    jogador.receba(new PedidoDePontuacao(pontos));
+                    
                 }
+               
 			}
         }
         catch (Exception erro)
@@ -111,15 +114,6 @@ public class SupervisoraDeConexao extends Thread
 
     private String quemGanhou()
     {
-		/*JogadaJogada jogada1 = this.jogadores.get(0).getJogada();
-		Jogada jogada2 = this.jogadores.get(1).getJogada();
-
-		int comp = jogada1.compareTo(jogada2);
-
-		if(comp == 0)
-			return "empate";
-		if(comp > 0)
-			return this.jogadores.get(0).getNome();*/
-		return "a";
+		return pontos + " ";
 	}
 }

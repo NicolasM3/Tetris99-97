@@ -11,8 +11,21 @@ import javax.swing.JFrame;
  * The {@code Tetris} class is responsible for handling much of the game logic
  * and reading user input.
  * 
- * @author Brendan Jones
+ * @author Nicolas Denadai
  *
+ */
+
+/*
+ * 		try 
+		{
+			PedidoDePontuacao pontos = (PedidoDePontuacao) servidor.envie();
+			System.out.println(pontos.getPontuacao() + " ");
+		}
+		catch(Exception ex)
+		{
+			System.err.println("Erro de conexão com o servidor");
+		}
+ * 
  */
 public class Tetris extends JFrame {
 
@@ -294,6 +307,7 @@ public class Tetris extends JFrame {
 						score += 50 << cleared;
 						try {
 							servidor.receba(new PedidoParaAdicionarPontos(50));
+							//System.out.println("pontos adicionado");
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -359,8 +373,7 @@ public class Tetris extends JFrame {
 	/**
 	 * Starts the game running. Initializes everything and enters the game loop.
 	 */
-	private void startGame() {
-		
+	private void startGame() {	
 		startTime = (int) Clock.getCurrentTime();
 		
 		/*
@@ -417,7 +430,7 @@ public class Tetris extends JFrame {
 	/**
 	 * Updates the game and handles the bulk of it's logic.
 	 */
-	private void updateGame() {
+	private void updateGame(){
 		/*
 		 * Check to see if the piece's position can move down to the next row.
 		 */
@@ -438,6 +451,7 @@ public class Tetris extends JFrame {
 				 * Check to see if adding the new piece resulted in any cleared lines. If so,
 				 * increase the player's score. (Up to 4 lines can be cleared in a single go;
 				 * [1 = 100pts, 2 = 200pts, 3 = 400pts, 4 = 800pts]).
+				 * 
 				 */
 				int cleared = board.checkLines();
 				if(cleared > 0) {
@@ -445,6 +459,7 @@ public class Tetris extends JFrame {
 					try
 					{
 						servidor.receba(new PedidoParaAdicionarPontos(50));
+
 					}
 					catch(Exception ex)
 					{

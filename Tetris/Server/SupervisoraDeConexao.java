@@ -4,7 +4,7 @@ import java.util.*;
 
 public class SupervisoraDeConexao extends Thread
 {
-    private double              valor=0;
+    private double              pontos;
     private Parceiro            jogador;
     private Socket              conexao;
     private ArrayList<Parceiro> jogadores;
@@ -23,6 +23,7 @@ public class SupervisoraDeConexao extends Thread
 
         this.conexao  = conexao;
         this.jogadores = jogadores;
+        this.pontos = 0;
     }
 
     public void run ()
@@ -84,9 +85,18 @@ public class SupervisoraDeConexao extends Thread
             for(;;)
             {
                 Comunicado comunicado = this.jogador.envie ();
-                /*
-                 if(comunicado==null)
+
+                if(comunicado==null)
                     return;
+
+                if(comunicado instanceof PedidoParaAdicionarPontos)
+                {
+                    PedidoParaAdicionarPontos a = (PedidoParaAdicionarPontos) comunicado;
+                    ponto = a.getPontosParaAdicionar();
+                    pontos = pontos + ponto;
+                }
+
+                /*
 
 				  if(comunicado instanceof PedidoDeNome)
 				        this.jogador.setNome(((PedidoDeNome)comunicado).getNome());

@@ -6,14 +6,18 @@ import java.net.*;
 import java.io.*;
 
 import javax.swing.JFrame;
+
 /**
- * The {@code Tetris} class is responsible for handling much of the game logic and
- * reading user input.
+ * The {@code Tetris} class is responsible for handling much of the game logic
+ * and reading user input.
+ * 
  * @author Brendan Jones
  *
  */
 public class Tetris extends JFrame {
-	
+
+	private static Parceiro servidor;
+
 	/**
 	 * The Serial Version UID.
 	 */
@@ -23,124 +27,123 @@ public class Tetris extends JFrame {
 	 * The number of milliseconds per frame.
 	 */
 	private static final long FRAME_TIME = 1000L / 50L;
-	
+
 	/**
 	 * The number of pieces that exist.
 	 */
 	private static final int TYPE_COUNT = TileType.values().length;
-	
+
 	/**
-	 * Number of cycles to wait after the tile hit the bottom, so
-	 * that we can move the piece after that.
+	 * Number of cycles to wait after the tile hit the bottom, so that we can move
+	 * the piece after that.
 	 */
 	private static final int WAIT_CYCLES = 5;
-		
+
 	/**
 	 * The BoardPanel instance.
 	 */
 	private BoardPanel board;
-	
+
 	/**
 	 * The SidePanel instance.
 	 */
 	private SidePanel side;
-	
+
 	/**
 	 * Whether or not the game is paused.
 	 */
 	private boolean isPaused;
-		
+
 	/**
-	 * Whether or not we've played a game yet. This is set to true
-	 * initially and then set to false when the game starts.
+	 * Whether or not we've played a game yet. This is set to true initially and
+	 * then set to false when the game starts.
 	 */
 	private boolean isNewGame;
-	
+
 	/**
 	 * Whether or not the game is over.
 	 */
 	private boolean isGameOver;
-	
+
 	/**
 	 * The current level we're on.
 	 */
 	private int level;
-	
+
 	/**
 	 * The current score.
 	 */
 	private int score;
-	
+
 	/**
-	 * The random number generator. This is used to
-	 * spit out pieces randomly.
+	 * The random number generator. This is used to spit out pieces randomly.
 	 */
 	private Random random;
-	
+
 	/**
 	 * The clock that handles the update logic.
 	 */
 	private Clock logicTimer;
-				
+
 	/**
 	 * The current type of tile.
 	 */
 	private TileType currentType;
-	
+
 	/**
 	 * The next type of tile.
 	 */
 	private TileType nextType;
-		
+
 	/**
 	 * The current column of our tile.
 	 */
 	private int currentCol;
-	
+
 	/**
 	 * The current row of our tile.
 	 */
 	private int currentRow;
-	
+
 	/**
 	 * The current rotation of our tile.
 	 */
 	private int currentRotation;
-		
+
 	/**
-	 * Ensures that a certain amount of time passes after a piece is
-	 * spawned before we can drop it.
+	 * Ensures that a certain amount of time passes after a piece is spawned before
+	 * we can drop it.
 	 */
 	private int dropCooldown;
-	
+
 	/**
 	 * The speed of the game.
 	 */
 	private float gameSpeed;
-	
+
 	/**
 	 * The cycle timer.
 	 */
 	private int waitingCycles = WAIT_CYCLES;
-	
+
 	/**
 	 * The tile we are currently holding
 	 */
 	private TileType hold = null;
-	
+
 	private boolean didHold = false;
-	
+
 	private int startTime;
-	
+
 	private int endTime;
-	
+
 	private int gameTime;
-	
+
 	private String usuario;
-	
+
 	/**
-	 * Creates a new Tetris instance. Sets up the window's properties,
-	 * and adds a controller listener.
+	 * Creates a new Tetris instance. Sets up the window's properties, and adds a
+	 * controller listener.
 	 */
 	private Tetris(String usuario) {
 		/*
@@ -150,65 +153,65 @@ public class Tetris extends JFrame {
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
-		
+
 		/*
 		 * Initialize the BoardPanel and SidePanel instances.
 		 */
 		this.board = new BoardPanel(this);
 		this.side = new SidePanel(this);
-		
+
 		/*
 		 * Add the BoardPanel and SidePanel instances to the window.
 		 */
 		add(board, BorderLayout.CENTER);
 		add(side, BorderLayout.EAST);
-		
+
 		/*
 		 * Adds a custom anonymous KeyListener to the frame.
 		 */
 		addKeyListener(new KeyAdapter() {
-			
+
 			@Override
 			public void keyPressed(KeyEvent e) {
-								
-				switch(e.getKeyCode()) {
-				
+
+				switch (e.getKeyCode()) {
+
 				/*
-				 * Drop - When pressed, we check to see that the game is not
-				 * paused and that there is no drop cooldown, then set the
-				 * logic timer to run at a speed of 25 cycles per second.
+				 * Drop - When pressed, we check to see that the game is not paused and that
+				 * there is no drop cooldown, then set the logic timer to run at a speed of 25
+				 * cycles per second.
 				 */
 				case KeyEvent.VK_S:
 				case KeyEvent.VK_DOWN:
-					if(!isPaused && dropCooldown == 0) {
+					if (!isPaused && dropCooldown == 0) {
 						logicTimer.setCyclesPerSecond(25.0f);
 					}
 					break;
-					
+
 				/*
-				 * Move Left - When pressed, we check to see that the game is
-				 * not paused and that the position to the left of the current
-				 * position is valid. If so, we decrement the current column by 1.
+				 * Move Left - When pressed, we check to see that the game is not paused and
+				 * that the position to the left of the current position is valid. If so, we
+				 * decrement the current column by 1.
 				 */
 				case KeyEvent.VK_A:
 				case KeyEvent.VK_LEFT:
-					if(!isPaused && board.isValidAndEmpty(currentType, currentCol - 1, currentRow, currentRotation)) {
+					if (!isPaused && board.isValidAndEmpty(currentType, currentCol - 1, currentRow, currentRotation)) {
 						currentCol--;
 					}
 					break;
-					
+
 				/*
-				 * Move Right - When pressed, we check to see that the game is
-				 * not paused and that the position to the right of the current
-				 * position is valid. If so, we increment the current column by 1.
+				 * Move Right - When pressed, we check to see that the game is not paused and
+				 * that the position to the right of the current position is valid. If so, we
+				 * increment the current column by 1.
 				 */
 				case KeyEvent.VK_D:
 				case KeyEvent.VK_RIGHT:
-					if(!isPaused && board.isValidAndEmpty(currentType, currentCol + 1, currentRow, currentRotation)) {
+					if (!isPaused && board.isValidAndEmpty(currentType, currentCol + 1, currentRow, currentRotation)) {
 						currentCol++;
 					}
 					break;
-					
+
 				/*
 				 * Rotate Anticlockwise - When pressed, check to see that the game is not paused
 				 * and then attempt to rotate the piece anticlockwise. Because of the size and
@@ -216,79 +219,85 @@ public class Tetris extends JFrame {
 				 * rotation, the code for rotating the piece is handled in another method.
 				 */
 				case KeyEvent.VK_Q:
-					if(!isPaused) {
+					if (!isPaused) {
 						rotatePiece((currentRotation == 0) ? 3 : currentRotation - 1);
 					}
 					break;
-				
+
 				/*
-			     * Rotate Clockwise - When pressed, check to see that the game is not paused
-				 * and then attempt to rotate the piece clockwise. Because of the size and
+				 * Rotate Clockwise - When pressed, check to see that the game is not paused and
+				 * then attempt to rotate the piece clockwise. Because of the size and
 				 * complexity of the rotation code, as well as it's similarity to anticlockwise
 				 * rotation, the code for rotating the piece is handled in another method.
 				 */
 				case KeyEvent.VK_E:
 				case KeyEvent.VK_SPACE:
-					if(!isPaused) {
+					if (!isPaused) {
 						rotatePiece((currentRotation == 3) ? 0 : currentRotation + 1);
 					}
 					break;
-					
+
 				/*
 				 * Pause Game - When pressed, check to see that we're currently playing a game.
 				 * If so, toggle the pause variable and update the logic timer to reflect this
-				 * change, otherwise the game will execute a huge number of updates and essentially
-				 * cause an instant game over when we unpause if we stay paused for more than a
-				 * minute or so.
+				 * change, otherwise the game will execute a huge number of updates and
+				 * essentially cause an instant game over when we unpause if we stay paused for
+				 * more than a minute or so.
 				 */
 				case KeyEvent.VK_P:
-					if(!isGameOver && !isNewGame) {
+					if (!isGameOver && !isNewGame) {
 						isPaused = !isPaused;
 						logicTimer.setPaused(isPaused);
 					}
 					break;
-				
+
 				/*
-				 * Start Game - When pressed, check to see that we're in either a game over or new
-				 * game state. If so, reset the game.
+				 * Start Game - When pressed, check to see that we're in either a game over or
+				 * new game state. If so, reset the game.
 				 */
 				case KeyEvent.VK_ENTER:
-					if(isGameOver || isNewGame) {
+					if (isGameOver || isNewGame) {
 						resetGame();
 					}
 					break;
-				
+
 				case KeyEvent.VK_R:
-					if(isPaused) {
+					if (isPaused) {
 						resetGame();
 						isPaused = false;
 						logicTimer.setPaused(isPaused);
 					}
 					break;
-				
+
 				case KeyEvent.VK_F:
 				case KeyEvent.VK_H:
 					if (!didHold) {
 						holdPiece();
 					}
 					break;
-				
+
 				case KeyEvent.VK_W:
 				case KeyEvent.VK_UP:
-					for(int lowest = currentRow; lowest < BoardPanel.ROW_COUNT; lowest++) {
-						//If no collision is detected, try the next row.
-						if(board.isValidAndEmpty(currentType, currentCol, lowest, currentRotation)) {					
+					for (int lowest = currentRow; lowest < BoardPanel.ROW_COUNT; lowest++) {
+						// If no collision is detected, try the next row.
+						if (board.isValidAndEmpty(currentType, currentCol, lowest, currentRotation)) {
 							continue;
 						}
-						
+
 						lowest--;
-						
+
 						board.addPiece(currentType, currentCol, lowest, currentRotation);
 						break;
 					}
 					int cleared = board.checkLines();
-					if(cleared > 0) {
+					if (cleared > 0) {
 						score += 50 << cleared;
+						try {
+							servidor.receba(new PedidoParaAdicionarPontos(50));
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 					
 					gameSpeed += 0.035f;
@@ -433,6 +442,15 @@ public class Tetris extends JFrame {
 				int cleared = board.checkLines();
 				if(cleared > 0) {
 					score += 50 << cleared;
+					try
+					{
+						servidor.receba(new PedidoParaAdicionarPontos(50));
+					}
+					catch(Exception ex)
+					{
+						System.out.println("Erro ao enviar dados pelo servidor");
+					}
+
 				}
 				
 				/*
@@ -709,7 +727,7 @@ public class Tetris extends JFrame {
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			System.err.println("Valores inválidos");
+			System.err.println("Valores invï¿½lidos");
 			return;
 		}
 
@@ -755,7 +773,6 @@ public class Tetris extends JFrame {
 		    return;
 		}
 
-		Parceiro servidor=null;
 		try
 		{
 		    servidor = new Parceiro (conexao, receptor, transmissor);

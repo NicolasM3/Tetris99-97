@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Servidor",
+            "request": "launch",
+            "mainClass": "Servidor",
+            "projectName": "Tetris"
+        }
+    ]
+}

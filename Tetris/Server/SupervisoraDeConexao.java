@@ -8,8 +8,6 @@ public class SupervisoraDeConexao extends Thread
     private Parceiro            jogador;
     private Socket              conexao;
     private ArrayList<Parceiro> jogadores;
-    private static int nmrJogadas = 0;
-    private static int qtdJogadores = 0;
 
     public SupervisoraDeConexao
     (Socket conexao, ArrayList<Parceiro> jogadores)
@@ -92,38 +90,9 @@ public class SupervisoraDeConexao extends Thread
                 if(comunicado instanceof PedidoParaAdicionarPontos)
                 {
                     PedidoParaAdicionarPontos a = (PedidoParaAdicionarPontos) comunicado;
-                    ponto = a.getPontosParaAdicionar();
-                    pontos = pontos + ponto;
+                    double ponto = a.getPontosParaAdicionar();
+                    //pontos = pontos + ponto;
                 }
-
-                /*
-
-				  if(comunicado instanceof PedidoDeNome)
-				        this.jogador.setNome(((PedidoDeNome)comunicado).getNome());
-				  else
-				  {
-					  nmrJogadas++;
-
-             		  if(comunicado instanceof PedidoDeJogada)
-             		   	this.jogador.setJogada(((PedidoDeJogada)comunicado).getValorJogada());
-
-					    System.out.println("jogada: " + nmrJogadas);
-             		   if(nmrJogadas == 2)
-             		   {
-							String ganhador = quemGanhou();
-							for(Parceiro jogador:this.jogadores)
-             			   		jogador.receba(new Resultado(ganhador));
-             			   	nmrJogadas = 0;
-					    }
-                		else if (comunicado instanceof PedidoParaSair)
-                		{
-                	    	synchronized (this.jogadores)
-                	    	{
-                	    	    this.jogadores.remove (this.jogador);
-                	    	}
-                	    	this.jogador.adeus();
-                		}
-            	}*/
 			}
         }
         catch (Exception erro)

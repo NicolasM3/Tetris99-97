@@ -743,7 +743,7 @@ public class Tetris extends JFrame {
 		    System.err.println ("Indique o servidor e a porta corretos!\n");
 		    return;
 		}
-		
+
 		ObjectOutputStream transmissor=null;
 		try
 		{
@@ -756,22 +756,22 @@ public class Tetris extends JFrame {
 		    erro.printStackTrace();
 
 		    System.err.println ("Indique o servidor e a porta corretos!\n");
-		    return;
 		}
 
 		ObjectInputStream receptor=null;
 		try
 		{
+			
 		    receptor =
 		    new ObjectInputStream(
-		    conexao.getInputStream());
+		    conexao.getInputStream());	//erro
 		}
 		catch (Exception erro)
 		{
 		    erro.printStackTrace();
 		    System.err.println ("Indique o servidor e a porta corretos!\n");
-		    return;
 		}
+		
 
 		try
 		{
@@ -784,7 +784,6 @@ public class Tetris extends JFrame {
 		    System.err.println ("Indique o servidor e a porta corretos!\n");
 		    return;
 		}
-		
 		Tetris tetris = new Tetris("usuario");
 		tetris.startGame();
 	}

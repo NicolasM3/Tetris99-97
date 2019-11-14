@@ -13,7 +13,7 @@ public class Servidor
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			System.err.println("Valor inválido");
+			System.err.println("Valor invï¿½lido");
 			return;
 		}
 		ArrayList<Parceiro> jogadores = new ArrayList<Parceiro>();
@@ -70,7 +70,7 @@ public class Servidor
 				System.exit(0);
 			}
 			else
-				System.out.println("Comando inválido!\n");
+				System.out.println("Comando invï¿½lido!\n");
 		}
 	}
 }

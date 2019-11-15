@@ -22,12 +22,12 @@ public class Servidor
 		try
 		{
 			aceitadoraDeConexao = new AceitadoraDeConexao(porta, jogadores);
-			 try
-			 {
-			     System.out.println("Ip para jogo: "+InetAddress.getLocalHost().getHostAddress());
-			 }
-			 catch(Exception e)
-       		 {}
+			try
+			{
+				System.out.println("Ip para jogo: "+InetAddress.getLocalHost().getHostAddress());
+			}
+			catch(Exception e)
+			{}
 			aceitadoraDeConexao.start();
 		}
 		catch(Exception ex)

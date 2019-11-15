@@ -19,7 +19,7 @@ public class Cliente
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			System.err.println("Valores inválidos");
+			System.err.println("Valores invï¿½lidos");
 			return;
 		}
 
@@ -76,37 +76,71 @@ public class Cliente
 		    System.err.println ("Indique o servidor e a porta corretos!\n");
 		    return;
 		}
-		for(;;)
+
+		String nome = null;
+		try
 		{
-
-			String opcao = Teclado.getUmString();
-
-			if(opcao == "a")
-			{
-
-				try {
-					servidor.receba(new PedidoParaAdicionarPontos(50));
-					//System.out.println("pontos adicionado");
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1
-					.printStackTrace();
-				}
-
-			}
-			else
-			{
-				try
-				{
-					PedidoDePontuacao pontosA = (PedidoDePontuacao) servidor.envie();
-					pontos = pontos + (int)pontosA.getPontuacao();
-				}
-				catch(Exception ex)
-				{
-					System.err.println("Erro de conexão com o servidor");
-				}
-			}
-			System.out.println(pontos);
+			System.out.println("Digite seu nome:\n");
+			nome = Teclado.getUmString();
+			servidor.receba(new PedidoDeNome(nome));
 		}
+		catch(Exception ex)
+		{
+		    System.err.println ("Nome invÃ¡lido!\n");
+		    return;
+		}
+
+		char opcao = ' ';
+		do
+		{
+			System.out.println("A = somar pontos/B = mostrar pontos/ Z = sair");
+			try
+		    {
+				opcao = Character.toUpperCase(Teclado.getUmChar());
+		    }
+		    catch (Exception erro)
+		    {
+				System.err.println ("Opcao invalida!\n");
+				continue;
+		    }
+		   if ("ABZ".indexOf(opcao)==-1)
+		   {
+				System.err.println ("Opcao invalida!\n");
+				continue;
+		   }
+
+		   try
+			{
+				if ("AB".indexOf(opcao)!=-1)
+				{
+					switch (opcao)
+					{
+						case 'A':
+							servidor.receba(new PedidoParaAdicionarPontos(50.0));
+							//PedidoDePontuacao pontosA = (PedidoDePontuacao) servidor.envie();		//erro
+							pontos = pontos + (int)pontosA.getPontuacao();
+							break;
+						case 'B':
+							System.out.println(pontos);
+							break;
+					}
+				}
+				else if(opcao == 'Z')
+				{
+					//servidor.receba(new PedidoParaSair());
+					System.out.println("Saindo...");
+				}
+			}
+			catch (Exception erro)
+			{
+				System.err.println(erro);
+				/*
+				System.err.println ("Erro de comunicacao com o servidor;");
+				System.err.println ("Tente novamente!");
+				System.err.println ("Caso o erro persista, termine o programa");
+				System.err.println ("e volte a tentar mais tarde!");*/
+			}
+		}
+		while (opcao != 'Z');
 	}
 }

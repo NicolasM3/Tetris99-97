@@ -4,7 +4,7 @@ import java.util.*;
 
 public class SupervisoraDeConexao extends Thread
 {
-    private double              pontos;
+    private static double       pontos;
     private Parceiro            jogador;
     private Socket              conexao;
     private ArrayList<Parceiro> jogadores;
@@ -69,17 +69,6 @@ public class SupervisoraDeConexao extends Thread
 
         try
         {
-            /*synchronized (this.jogadores)
-            {
-                this.jogadores.add (this.jogador);
-                this.qtdJogadores++;
-                if(this.qtdJogadores == 2)
-                	for(Parceiro jogador: this.jogadores)
-                	{
-						jogador.receba(new ComunicadoComecar(true));
-					}
-            }*/
-
             for(;;)
             {
                 Comunicado comunicado = this.jogador.envie();
@@ -87,13 +76,16 @@ public class SupervisoraDeConexao extends Thread
                 if(comunicado==null)
                     return;
 
+
+                if(comunicado instanceof PedidoDeNome)
+                    this.jogador.setNome(((PedidoDeNome)comunicado).getNome());
+                
                 if(comunicado instanceof PedidoParaAdicionarPontos)
                 {
                     PedidoParaAdicionarPontos a = (PedidoParaAdicionarPontos) comunicado;
                     double ponto = a.getPontosParaAdicionar();
                     pontos = pontos + ponto;
                     jogador.receba(new PedidoDePontuacao(pontos));
-                    
                 }
                
 			}

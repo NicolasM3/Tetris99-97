@@ -4,7 +4,7 @@ import java.util.*;
 
 public class SupervisoraDeConexao extends Thread
 {
-    private static double       pontos;
+    private double              pontos;
     private Parceiro            jogador;
     private Socket              conexao;
     private ArrayList<Parceiro> jogadores;
@@ -66,7 +66,7 @@ public class SupervisoraDeConexao extends Thread
         }
         catch (Exception erro)
         {} // sei que passei os parametros corretos
-
+        double pontoA = 0;
         try
         {
             for(;;)
@@ -76,16 +76,20 @@ public class SupervisoraDeConexao extends Thread
                 if(comunicado==null)
                     return;
 
-
                 if(comunicado instanceof PedidoDeNome)
                     this.jogador.setNome(((PedidoDeNome)comunicado).getNome());
                 
                 if(comunicado instanceof PedidoParaAdicionarPontos)
                 {
                     PedidoParaAdicionarPontos a = (PedidoParaAdicionarPontos) comunicado;
-                    double ponto = a.getPontosParaAdicionar();
-                    pontos = pontos + ponto;
-                    jogador.receba(new PedidoDePontuacao(pontos));
+                    pontoA = a.getPontosParaAdicionar();
+                    jogador.adicionarPontos(pontoA);
+                    for(Parceiro jogador:this.jogadores)
+                    {
+                        //String nome = QuemGanhou();
+                        String nome = "Nicolas";
+                        jogador.receba(new Resultado(nome));
+                    } 
                 }
                
 			}
@@ -104,8 +108,18 @@ public class SupervisoraDeConexao extends Thread
         }
     }
 
-    private String quemGanhou()
+    private String QuemGanhou()
     {
-		return pontos + " ";
+        double maiorPonto = this.jogadores.get(0).getPontos();
+        int posicao = 0;
+
+        for(int i = 0; i < jogadores.size(); i++)
+        {
+            double valor = this.jogadores.get(i).getPontos();
+            if(maiorPonto < valor)
+                posicao = i;
+        }
+
+        return this.jogadores.get(posicao).getNome();
 	}
 }

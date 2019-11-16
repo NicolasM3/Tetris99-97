@@ -7,7 +7,7 @@ public class Parceiro
     private Socket             conexao;
     private ObjectInputStream  receptor;
     private ObjectOutputStream transmissor;
-
+    private double pontos;
     private String nome;
 
     public Parceiro (Socket             conexao,
@@ -27,6 +27,7 @@ public class Parceiro
         this.conexao     = conexao;
         this.receptor    = receptor;
         this.transmissor = transmissor;
+        this.pontos = 0;
     }
 
     public void receba (Comunicado x) throws Exception
@@ -38,6 +39,7 @@ public class Parceiro
         }
         catch (IOException erro)
         {
+            //throw new Exception (erro);
             throw new Exception ("Erro de transmissao");
         }
     }
@@ -45,7 +47,9 @@ public class Parceiro
     public Comunicado envie () throws Exception
     {
         try
-        {
+        {            
+            System.out.println(this.receptor.readObject());
+            System.out.println("a");
             return (Comunicado)this.receptor.readObject();
         }
         catch (Exception erro)
@@ -57,14 +61,24 @@ public class Parceiro
 	public void setNome(String nome) throws Exception
 	{
 		if(nome == null)
-			throw new Exception("Nome inválido!");
+			throw new Exception("Nome invï¿½lido!");
 		this.nome = nome;
 	} 				
 
 	public String getNome()
 	{
 		return this.nome;
-	}
+    }
+    
+    public double getPontos()
+    {
+        return pontos;
+    }
+
+    public void adicionarPontos(double valorASerAdicionado)
+    {
+        this.pontos = pontos + valorASerAdicionado;
+    }
 
     public void adeus () throws Exception
     {

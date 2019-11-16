@@ -26,7 +26,7 @@ public class Cliente
 		Socket conexao=null;
 		try
 		{
-		    conexao = new Socket (host, porta);
+			conexao = new Socket (host, porta);
 		}
 		catch (Exception erro)
 		{
@@ -41,7 +41,7 @@ public class Cliente
 		{
 		    transmissor =
 		    new ObjectOutputStream(
-		    conexao.getOutputStream());
+		    conexao.getOutputStream()); //erro
 		}
 		catch (Exception erro)
 		{
@@ -56,7 +56,7 @@ public class Cliente
 		{
 		    receptor =
 		    new ObjectInputStream(
-		    conexao.getInputStream());
+			conexao.getInputStream());
 		}
 		catch (Exception erro)
 		{
@@ -103,11 +103,11 @@ public class Cliente
 				System.err.println ("Opcao invalida!\n");
 				continue;
 		    }
-		   if ("ABZ".indexOf(opcao)==-1)
-		   {
-				System.err.println ("Opcao invalida!\n");
-				continue;
-		   }
+			if ("ABZ".indexOf(opcao)==-1)
+			{
+					System.err.println ("Opcao invalida!\n");
+					continue;
+			}
 
 		   try
 			{
@@ -116,9 +116,10 @@ public class Cliente
 					switch (opcao)
 					{
 						case 'A':
-							servidor.receba(new PedidoParaAdicionarPontos(50.0));
-							//PedidoDePontuacao pontosA = (PedidoDePontuacao) servidor.envie();		//erro
-							pontos = pontos + (int)pontosA.getPontuacao();
+							servidor.receba(new PedidoParaAdicionarPontos(50));
+							Resultado pontosA = (Resultado) servidor.envie();		//erro
+							//pontos = pontos + (int)pontosA.getPontuacao();
+							System.out.println(pontosA.getGanhador());
 							break;
 						case 'B':
 							System.out.println(pontos);

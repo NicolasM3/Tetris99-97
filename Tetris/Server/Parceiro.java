@@ -7,7 +7,7 @@ public class Parceiro
     private Socket             conexao;
     private ObjectInputStream  receptor;
     private ObjectOutputStream transmissor;
-    //private Jogada jogada;
+    private double pontos;
     private String nome;
 
     public Parceiro (Socket             conexao,
@@ -27,6 +27,7 @@ public class Parceiro
         this.conexao     = conexao;
         this.receptor    = receptor;
         this.transmissor = transmissor;
+        this.pontos = 0;
     }
 
     public void receba (Comunicado x) throws Exception
@@ -54,29 +55,27 @@ public class Parceiro
         }
     }
 
-    /*public void setJogada(Jogada jogada) throws Exception
-    {
-		if(jogada == null)
-			throw new Exception("Jogada inv�lida");
-		this.jogada = jogada;
-	}*/
-
 	public void setNome(String nome) throws Exception
 	{
 		if(nome == null)
 			throw new Exception("Nome inv�lido!");
 		this.nome = nome;
-	}
-
-	/*public Jogada getJogada()
-	{
-		return this.jogada;
-	}*/
+	} 				
 
 	public String getNome()
 	{
 		return this.nome;
-	}
+    }
+    
+    public double getPontos()
+    {
+        return pontos;
+    }
+
+    public void adicionarPontos(double valorASerAdicionado)
+    {
+        this.pontos = pontos + valorASerAdicionado;
+    }
 
     public void adeus () throws Exception
     {

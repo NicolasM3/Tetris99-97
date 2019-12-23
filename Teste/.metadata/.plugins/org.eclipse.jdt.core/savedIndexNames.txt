@@ -1,0 +1,3 @@
+INDEX VERSION 1.131+C:\Users\CLELIA MARTINS DE OL\Desktop\Teste\.metadata\.plugins\org.eclipse.jdt.core
+1860891807.index
+3244704807.index
